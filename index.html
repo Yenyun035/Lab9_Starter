@@ -86,8 +86,15 @@
       <button>Trigger a Global Error</button>
     </section>
   </main>
-
+                        
   <script>
+    class InvalidInputError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "InvalidInputError";
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,14 +102,140 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
-    });
 
-    let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
+      try {
+        if(!/^\d+$/.test(firstNum)) {
+          throw new SyntaxError("Hmmm, invalid input?");
+        } else if(!/^\d+$/.test(secondNum)) {
+          throw new InvalidInputError("This is not good....");
+        }
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch(error) {
+        console.log(error);
+      }
+    });
 
     // Start your code here
     // You may move this JS to another file if you wish
+    let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
+
+    //console.log
+    errorBtns[0].addEventListener("click", function() {
+      let firstNum = document.querySelector('#first-num').value;
+      let secondNum = document.querySelector('#second-num').value;
+      let operator = document.querySelector('#operator').value;
+      console.log(firstNum, operator, secondNum);
+    });
+
+    //console.error
+    errorBtns[1].addEventListener("click", function() {
+      let firstNum = document.querySelector('#first-num').value;
+      let secondNum = document.querySelector('#second-num').value;
+      let operator = document.querySelector('#operator').value;
+      console.error(firstNum, operator, secondNum);
+    });
+
+    //console.count
+    errorBtns[2].addEventListener("click", function() {
+      let firstNum = document.querySelector('#first-num').value;
+      let secondNum = document.querySelector('#second-num').value;
+      let operator = document.querySelector('#operator').value;
+      console.count(firstNum + operator + secondNum);
+    });
+
+    //console.warn
+    errorBtns[3].addEventListener("click", function() {
+      let firstNum = document.querySelector('#first-num').value;
+      let secondNum = document.querySelector('#second-num').value;
+      let operator = document.querySelector('#operator').value;
+      console.warn(firstNum + operator + secondNum);
+    });
+
+    //console.assert
+    errorBtns[4].addEventListener("click", function() {
+      let firstNum = document.querySelector('#first-num').value;
+      let secondNum = document.querySelector('#second-num').value;
+      let operator = document.querySelector('#operator').value;
+      console.assert(firstNum === secondNum, "firstNum should be the same as secondNum");
+    });
+
+    //console.clear
+    errorBtns[5].addEventListener("click", function() {
+      console.clear();
+    });
+
+    //console.dir
+    errorBtns[6].addEventListener("click", function() {
+      let firstNum = document.querySelector('#first-num');
+      let secondNum = document.querySelector('#second-num');
+      let operator = document.querySelector('#operator');
+      console.dir(firstNum);
+      console.dir(operator);
+      console.dir(secondNum);
+    });
+
+    //console.dirxml
+    errorBtns[7].addEventListener("click", function() {
+      let firstNum = document.querySelector('#first-num');
+      let secondNum = document.querySelector('#second-num');
+      let operator = document.querySelector('#operator');
+      console.dirxml(firstNum);
+      console.dirxml(operator);
+      console.dirxml(secondNum);
+    });
+
+    //console.group
+    errorBtns[8].addEventListener("click", function() {
+      console.group();
+    });
+
+    //console.groupEnd
+    errorBtns[9].addEventListener("click", function() {
+      console.groupEnd();
+    });
+
+    //console.table
+    errorBtns[10].addEventListener("click", function() {
+      let firstNum = document.querySelector('#first-num').value;
+      let secondNum = document.querySelector('#second-num').value;
+      let operator = document.querySelector('#operator').value;
+      console.table([{first: firstNum, operator: operator, second: secondNum}]);
+    });
+
+    //console.time
+    errorBtns[11].addEventListener("click", function() {
+      console.time();
+    });
+
+    //console.timeEnd
+    errorBtns[12].addEventListener("click", function() {
+      console.timeEnd();
+    });
+
+    //console.trace
+    errorBtns[13].addEventListener("click", function() {
+      function first() {
+        console.log(document.querySelector('#first-num').value);
+        second();
+      }
+      function second() {
+        console.log(document.querySelector('#second-num').value)
+        third();
+      }
+      function third() {
+        console.log(document.querySelector('#operator').value);
+        console.trace();
+      }
+      first();
+    });
+
+    errorBtns[14].addEventListener("click", function() {
+      window.addEventListener("error", (event) => {
+        console.log("That's right. You got an error....");
+        console.log(event);
+      });
+      eval("function s;");
+    });
   </script>
 </body>
-
 </html>
